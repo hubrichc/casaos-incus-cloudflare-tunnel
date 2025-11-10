@@ -27,3 +27,14 @@ Führen Sie das Skript `01-incus-host-setup.sh` auf Ihrem Alpine Host aus.
 
 ```bash
 sh 01-incus-host-setup.sh
+Schritt 2: Container erstellen
+Führen Sie das Skript 02-container-creation.sh auf dem Incus Host aus, um die Debian- und Alpine-Container zu starten.
+
+Bash
+
+sh 02-container-creation.sh
+Schritt 3: CasaOS installieren
+Folgen Sie den Anweisungen in 04-casaos-install.sh, um CasaOS im Debian-Container zu installieren.
+
+Schritt 4: Cloudflare Tunnel konfigurieren
+Folgen Sie der detaillierten Anleitung in 03-cloudflare-tunnel-setup.md, um den Cloudflare Tunnel im Alpine-Container einzurichten und die Verbindung zu CasaOS herzustellen.
