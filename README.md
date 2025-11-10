@@ -1,16 +1,24 @@
-# casaos-incus-cloudflare-tunnel
 # CasaOS und Cloudflare Zero Trust Tunnel auf Incus (Alpine Thin Client)
 
-Dieses Repository enthält die Befehle und Anleitungen, um die beliebte Self-Hosting-Plattform **CasaOS** sicher über einen **Cloudflare Zero Trust Tunnel** zugänglich zu machen. Die gesamte Architektur wird auf dem modernen Container-Manager **Incus** (dem Nachfolger von LXD) betrieben, welcher auf einem minimalistischen **Alpine Linux Thin Client** Host läuft.
+Dieses Repository demonstriert einen **Self-Hosting-Stack**, der auf **Zuverlässigkeit, Einfachheit und digitaler Souveränität** ausgelegt ist. Es enthält alle Befehle, um **CasaOS** über den modernen Container-Manager **Incus** zu hosten und sicher über einen **Cloudflare Zero Trust Tunnel** erreichbar zu machen.
 
-Dieses Setup ermöglicht ein hohes Maß an **digitaler Souveränität**, da die gesamte Infrastruktur auf der eigenen Hardware betrieben wird.
+## 💾 Der entscheidende Vorteil: Zuverlässigkeit durch Incus-Backup
+
+Jede Self-Hosting-Instanz benötigt eine einfache und garantierte Backup-Strategie. **Incus** (der Nachfolger von LXD) ist hierfür in kleineren Setups ideal, da es komplette Container – inklusive aller Daten und Konfigurationen – **atomar und konsistent** sichert:
+
+1.  **Einfache Sicherung:** Der Befehl `incus export <Containername>` erstellt ein vollständiges Backup-Archiv.
+2.  **Automatisierung:** Ein einfacher Cronjob kann täglich oder stündlich Backups erstellen und diese per SFTP, rsync oder einem anderen Protokoll auf einen externen Server übertragen.
+3.  **Schnelle Wiederherstellung:** Im Katastrophenfall kann das Backup-Archiv schnell wieder importiert und gestartet werden.
+4.  **Snapshots für Updates:** Vor jedem Upgrade ist ein Snapshot mit `incus snapshot <Containername>` sofort erstellt, was sofortige Rollbacks ermöglicht.
+
+Dieses Setup stellt sicher, dass Ihre **CasaOS** Instanz nicht nur läuft, sondern auch **produktionsreif** und **wartbar** ist.
 
 ## 🧱 Architektur
 
-* **Host-OS:** Alpine Linux 3.22 (als Thin Client)
-* **Container-Manager:** Incus
-* **Container A (CasaOS):** Debian 12 (für CasaOS)
-* **Container B (Tunnel):** Alpine 3.22 (für Cloudflare Tunnel Connector)
+* **Fundament (Host-OS):** Alpine Linux 3.22 (minimalistischer Thin Client)
+* **Container-Manager:** Incus (mit exzellenten Snapshot- und Backup-Funktionen)
+* **CasaOS Container:** Debian 12 (Hostet CasaOS)
+* **Cloudflare Tunnel Container:** Alpine 3.22 (Isolierter Cloudflare Tunnel Connector für **Zero Trust** Zugang)
 
 ## 🛠️ Voraussetzungen
 
@@ -19,22 +27,17 @@ Dieses Setup ermöglicht ein hohes Maß an **digitaler Souveränität**, da die 
 
 ## 🚀 Setup-Schritte
 
-Führen Sie die Skripte nacheinander aus. Für die Installation im Container müssen Sie die `incus exec` Befehle manuell ausführen.
+Folgen Sie den nummerierten Skripten und der Anleitung im Markdown-Dokument.
 
-### Schritt 1: Incus auf dem Host installieren
+1.  **`01-incus-host-setup.sh`**: Installation und Initialisierung von Incus auf dem Alpine Host.
+2.  **`02-container-creation.sh`**: Erstellung des Debian- und des separaten Alpine-Containers.
+3.  **`04-casaos-install.sh`**: Installation von CasaOS **im Debian-Container**.
+4.  **`03-cloudflare-tunnel-setup.md`**: Schritt-für-Schritt-Anleitung für die Installation und Konfiguration des Cloudflare Tunnels **im Alpine-Container**.
 
-Führen Sie das Skript `01-incus-host-setup.sh` auf Ihrem Alpine Host aus.
+---
 
-```bash
-sh 01-incus-host-setup.sh
-Schritt 2: Container erstellen
-Führen Sie das Skript 02-container-creation.sh auf dem Incus Host aus, um die Debian- und Alpine-Container zu starten.
+## 💡 Erweiterungsmöglichkeiten
 
-Bash
+Dieses Setup kann leicht um weitere Services wie **Nginx Proxy Manager (NPM Plus)**, **DDClient** oder andere **Kubernetes-Dienste** erweitert werden, die Sie in eigenen Containern betreiben können.
 
-sh 02-container-creation.sh
-Schritt 3: CasaOS installieren
-Folgen Sie den Anweisungen in 04-casaos-install.sh, um CasaOS im Debian-Container zu installieren.
-
-Schritt 4: Cloudflare Tunnel konfigurieren
-Folgen Sie der detaillierten Anleitung in 03-cloudflare-tunnel-setup.md, um den Cloudflare Tunnel im Alpine-Container einzurichten und die Verbindung zu CasaOS herzustellen.
+## 📺 YouTube Video
