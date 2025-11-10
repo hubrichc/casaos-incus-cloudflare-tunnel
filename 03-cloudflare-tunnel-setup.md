@@ -49,3 +49,14 @@ Wenn Sie den Tunnel nur schnell starten wollen, können Sie das Kommando mit ein
 
 ```bash
 incus exec alpine-container -- cloudflared tunnel run <IHR-TUNNEL-NAME> &
+Option B: Setup als OpenRC Service (Empfohlen für den Autostart)
+
+Da die Konfiguration (UUID/Token) über die Cloudflare Console erfolgt, ist der robusteste Weg, den cloudflared Dienst als OpenRC Service im Alpine Container einzurichten. Details hierzu finden Sie in der offiziellen cloudflared Dokumentation für Linux/OpenRC. Dies stellt sicher, dass der Dienst beim Hochfahren des Containers automatisch gestartet wird.
+
+Bash
+
+# Im Container (Alpine):
+# Hier müssten die Konfigurationsdateien (meist in /etc/cloudflared/config.yml) 
+# und der Startskript-Link für OpenRC erstellt werden, 
+# damit der Tunnel automatisch über 'rc-update add cloudflared default' startet.
+# Dies ist die sauberste Lösung für den Dauerbetrieb.
