@@ -2,7 +2,9 @@
 
 Dieser Schritt verbindet den CasaOS-Dienst mit dem Internet über den sicheren Cloudflare Zero Trust Tunnel.
 
-## 1. Cloudflare Connector (cloudflared) installieren
+## 1. Cloudflare Connector (cloudflared) vorab installieren
+
+Bevor Sie den Startbefehl aus der Cloudflare-Konsole verwenden können, muss das Tool im Container verfügbar sein.
 
 1.  **Wechseln Sie in den Alpine-Container:**
     ```bash
@@ -13,30 +15,37 @@ Dieser Schritt verbindet den CasaOS-Dienst mit dem Internet über den sicheren C
     apk update
     apk add cloudflared
     ```
-3.  **Im Container: Authentifizierung**
-    Führen Sie diesen Befehl aus und folgen Sie dem Browser-Link, um den Connector mit Ihrem Cloudflare-Konto zu verknüpfen:
+3.  **Verlassen Sie den Container vorerst:**
     ```bash
-    cloudflared tunnel login
-    ```
-4.  **Im Container: Tunnel erstellen** (ersetzen Sie `MY-CASAOS-TUNNEL` durch einen Namen Ihrer Wahl)
-    ```bash
-    cloudflared tunnel create MY-CASAOS-TUNNEL
+    exit
     ```
 
-## 2. Cloudflare Zero Trust Dashboard Konfiguration
+## 2. Tunnel über die Cloudflare Zero Trust Console erstellen (Empfohlen)
 
-1.  Gehen Sie in Ihr Cloudflare Zero Trust Dashboard.
-2.  Erstellen Sie eine **Public Hostname** Route für Ihren Dienst (z.B. `casaos.ihredomain.de`).
-3.  Als **Service**-URL geben Sie die interne IP-Adresse und den Port des CasaOS-Containers an:
+Dies ist der einfachste Weg, da Cloudflare die notwendigen Token automatisch bereitstellt.
+
+1.  Gehen Sie in Ihr **Cloudflare Zero Trust Dashboard** und erstellen Sie einen neuen Tunnel.
+2.  Folgen Sie den Anweisungen. Im Schritt **"Wählen Sie Ihre Umgebung"** wählen Sie "Linux" oder "Docker".
+3.  Die Konsole gibt Ihnen einen **fertigen `cloudflared tunnel run <UUID>` Befehl** aus, der das Authentifizierungs-Token enthält.
+4.  **Führen Sie diesen Befehl im Alpine-Container aus:**
+    ```bash
+    incus exec alpine-container -- cloudflared tunnel run <IHR-TUNNEL-NAME-ODER-UUID>
+    ```
+
+## 3. Hostname Route konfigurieren
+
+1.  Im Cloudflare Dashboard erstellen Sie eine **Public Hostname** Route für Ihren Dienst (z.B. `casaos.ihredomain.de`).
+2.  Als **Service**-URL geben Sie die interne IP-Adresse und den Port des CasaOS-Containers an:
     * **IP finden:** Führen Sie auf dem Incus Host aus: `incus ls` und notieren Sie die IPv4-Adresse von `debian-container`.
     * **Beispiel-Route:** `http://[IP-VON-DEBIAN-CONTAINER]:80`
 
-## 3. Tunnel starten
+## 4. Dauerhafter Betrieb und Autostart
 
-1.  **Im Container: Tunnel ausführen**
-    ```bash
-    cloudflared tunnel run MY-CASAOS-TUNNEL
-    ```
-    Der Tunnel ist nun aktiv und verbindet Ihren Hostnamen mit CasaOS.
+Für den produktiven Betrieb muss der Tunnel auch nach einem Neustart des Containers automatisch starten. Da Alpine Linux **OpenRC** verwendet, kann der `cloudflared` Dienst als Hintergrundprozess oder als OpenRC-Service eingerichtet werden.
 
-2.  *Optional: Autostart einrichten:* Fügen Sie `cloudflared` als Service mit `rc-update add cloudflared` hinzu, um einen automatischen Start des Tunnels nach einem Neustart des Containers zu gewährleisten.
+**Option A: Einfacher Start im Hintergrund (manuell, bis zum Container-Neustart)**
+
+Wenn Sie den Tunnel nur schnell starten wollen, können Sie das Kommando mit einem **Kaufmanns-Und (&)** in den Hintergrund schicken:
+
+```bash
+incus exec alpine-container -- cloudflared tunnel run <IHR-TUNNEL-NAME> &
