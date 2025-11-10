@@ -40,4 +40,4 @@ Folgen Sie den nummerierten Skripten und der Anleitung im Markdown-Dokument.
 
 Dieses Setup kann leicht um weitere Services wie **Nginx Proxy Manager (NPM Plus)**, **DDClient** oder andere **Kubernetes-Dienste** erweitert werden, die Sie in eigenen Containern betreiben können.
 
-## 📺 YouTube Video
+## [📺](https://www.youtube.com/watch?v=stuXqnhpHzA) YouTube Video
