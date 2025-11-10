@@ -1,36 +1,49 @@
-# 03 - Cloudflare Tunnel Setup (im alpine-container)
+# 03 - Cloudflare Tunnel Setup (Docker im Alpine Incus Container)
 
-Dieser Schritt verbindet den CasaOS-Dienst mit dem Internet über den sicheren Cloudflare Zero Trust Tunnel.
+Dieser Schritt verbindet den CasaOS-Dienst mit dem Internet über den sicheren Cloudflare Zero Trust Tunnel. Der Tunnel-Connector wird hierbei als **Docker Container** innerhalb des Incus-Containers "alpine-container" ausgeführt.
 
-## 1. Cloudflare Connector (cloudflared) vorab installieren
+## 1. Docker im Alpine-Container installieren und vorbereiten
 
-Bevor Sie den Startbefehl aus der Cloudflare-Konsole verwenden können, muss das Tool im Container verfügbar sein.
+Der "alpine-container" muss den Docker-Daemon starten, damit der Tunnel-Container laufen kann.
 
 1.  **Wechseln Sie in den Alpine-Container:**
     ```bash
     incus exec alpine-container /bin/sh
     ```
-2.  **Im Container: `cloudflared` installieren**
+2.  **Im Container: Docker installieren**
     ```bash
     apk update
-    apk add cloudflared
+    apk add docker
     ```
-3.  **Verlassen Sie den Container vorerst:**
+3.  **Im Container: Docker Service für den Autostart registrieren**
+    Damit Docker beim Starten des Incus-Containers automatisch läuft (via Alpine's OpenRC):
+    ```bash
+    rc-update add docker default
+    service docker start
+    ```
+4.  **Wichtiger Hinweis (Nesting):** Falls Docker im Incus-Container nicht startet, müssen Sie möglicherweise auf dem Incus Host das "Nesting" (Verschachtelung) für den Container erlauben. Führen Sie ggf. auf dem **Incus Host** aus:
+    ```bash
+    incus config set alpine-container security.nesting true
+    incus restart alpine-container
+    ```
+5.  **Verlassen Sie den Container:**
     ```bash
     exit
     ```
 
-## 2. Tunnel über die Cloudflare Zero Trust Console erstellen (Empfohlen)
-
-Dies ist der einfachste Weg, da Cloudflare die notwendigen Token automatisch bereitstellt.
+## 2. Tunnel über die Cloudflare Zero Trust Console erstellen
 
 1.  Gehen Sie in Ihr **Cloudflare Zero Trust Dashboard** und erstellen Sie einen neuen Tunnel.
-2.  Folgen Sie den Anweisungen. Im Schritt **"Wählen Sie Ihre Umgebung"** wählen Sie "Linux" oder "Docker".
-3.  Die Konsole gibt Ihnen einen **fertigen `cloudflared tunnel run <UUID>` Befehl** aus, der das Authentifizierungs-Token enthält.
-4.  **Führen Sie diesen Befehl im Alpine-Container aus:**
+2.  Wählen Sie im Schritt **"Wählen Sie Ihre Umgebung"** die Option "Docker".
+3.  Kopieren Sie den dort bereitgestellten **fertigen `docker run` Befehl**.
+4.  **Führen Sie den Befehl im Alpine-Container aus und fügen Sie die Restart Policy hinzu:**
+
+    Der kopierte Befehl muss um die Option **`--restart=unless-stopped`** ergänzt werden, um den "Always Restart"-Effekt zu erzielen. Ersetzen Sie `<...>` durch den von Cloudflare kopierten Teil:
+
     ```bash
-    incus exec alpine-container -- cloudflared tunnel run <IHR-TUNNEL-NAME-ODER-UUID>
+    incus exec alpine-container -- sh -c 'docker run --restart=unless-stopped <HIER DEN KOMPLETTEN CLOUDFLARE DOCKER RUN BEFEHL EINFÜGEN>'
     ```
+    *Der Schalter `--restart=unless-stopped` sorgt dafür, dass der Tunnel-Container automatisch startet, wenn der Docker-Daemon im Incus-Container hochfährt – dies erreicht den gewünschten "Always"-Effekt.*
 
 ## 3. Hostname Route konfigurieren
 
@@ -39,24 +52,6 @@ Dies ist der einfachste Weg, da Cloudflare die notwendigen Token automatisch ber
     * **IP finden:** Führen Sie auf dem Incus Host aus: `incus ls` und notieren Sie die IPv4-Adresse von `debian-container`.
     * **Beispiel-Route:** `http://[IP-VON-DEBIAN-CONTAINER]:80`
 
-## 4. Dauerhafter Betrieb und Autostart
+---
 
-Für den produktiven Betrieb muss der Tunnel auch nach einem Neustart des Containers automatisch starten. Da Alpine Linux **OpenRC** verwendet, kann der `cloudflared` Dienst als Hintergrundprozess oder als OpenRC-Service eingerichtet werden.
-
-**Option A: Einfacher Start im Hintergrund (manuell, bis zum Container-Neustart)**
-
-Wenn Sie den Tunnel nur schnell starten wollen, können Sie das Kommando mit einem **Kaufmanns-Und (&)** in den Hintergrund schicken:
-
-```bash
-incus exec alpine-container -- cloudflared tunnel run <IHR-TUNNEL-NAME> &
-Option B: Setup als OpenRC Service (Empfohlen für den Autostart)
-
-Da die Konfiguration (UUID/Token) über die Cloudflare Console erfolgt, ist der robusteste Weg, den cloudflared Dienst als OpenRC Service im Alpine Container einzurichten. Details hierzu finden Sie in der offiziellen cloudflared Dokumentation für Linux/OpenRC. Dies stellt sicher, dass der Dienst beim Hochfahren des Containers automatisch gestartet wird.
-
-Bash
-
-# Im Container (Alpine):
-# Hier müssten die Konfigurationsdateien (meist in /etc/cloudflared/config.yml) 
-# und der Startskript-Link für OpenRC erstellt werden, 
-# damit der Tunnel automatisch über 'rc-update add cloudflared default' startet.
-# Dies ist die sauberste Lösung für den Dauerbetrieb.
+Mit diesen Schritten ist Ihr GitHub-Repository nun präzise und spiegelt Ihre Architektur korrekt wider.
