@@ -1,43 +1,28 @@
-# CasaOS und Cloudflare Zero Trust Tunnel auf Incus (Alpine Thin Client)
+# CasaOS und Cloudflare Zero Trust Tunnel auf Incus (Die optimale Self-Hosting-Lösung für wenig Invest)
 
-Dieses Repository demonstriert einen **Self-Hosting-Stack**, der auf **Zuverlässigkeit, Einfachheit und digitaler Souveränität** ausgelegt ist. Es enthält alle Befehle, um **CasaOS** über den modernen Container-Manager **Incus** zu hosten und sicher über einen **Cloudflare Zero Trust Tunnel** erreichbar zu machen.
+Dieses Repository demonstriert einen **Self-Hosting-Stack**, der auf **Zuverlässigkeit, Kosteneffizienz und digitaler Souveränität** ausgelegt ist.
 
-## 💾 Der entscheidende Vorteil: Zuverlässigkeit durch Incus-Backup
+Die Lösung wurde erfolgreich auf einem **Wyse D10D Thin Client (4GB RAM / 120GB SSD)** auf ihre Minimalanforderungen getestet und läuft als **performante Hauptinstanz** ideal auf einem gebrauchten **Lifebook A55G Laptop (16 GB RAM / 1 TB SSD)**.
 
-Jede Self-Hosting-Instanz benötigt eine einfache und garantierte Backup-Strategie. **Incus** (der Nachfolger von LXD) ist hierfür in kleineren Setups ideal, da es komplette Container – inklusive aller Daten und Konfigurationen – **atomar und konsistent** sichert:
+## 🚀 Der unschlagbare Mehrwert dieses Setups
 
-1.  **Einfache Sicherung:** Der Befehl `incus export <Containername>` erstellt ein vollständiges Backup-Archiv.
-2.  **Automatisierung:** Ein einfacher Cronjob kann täglich oder stündlich Backups erstellen und diese per SFTP, rsync oder einem anderen Protokoll auf einen externen Server übertragen.
-3.  **Schnelle Wiederherstellung:** Im Katastrophenfall kann das Backup-Archiv schnell wieder importiert und gestartet werden.
-4.  **Snapshots für Updates:** Vor jedem Upgrade ist ein Snapshot mit `incus snapshot <Containername>` sofort erstellt, was sofortige Rollbacks ermöglicht.
-
-Dieses Setup stellt sicher, dass Ihre **CasaOS** Instanz nicht nur läuft, sondern auch **produktionsreif** und **wartbar** ist.
+| Feature | Vorteil | Beschreibung |
+| :--- | :--- | :--- |
+| **Effizienz & Kosten** | **Preis-Leistung unschlagbar** | Läuft stabil auf **sehr schwacher, alter Hardware**, wird aber zur performanten Lösung auf gebrauchten Laptops (Lifebook o.ä.), die oft für wenig Geld erhältlich sind. |
+| **Zuverlässigkeit** | **Integrierte USV (UPS)** | Durch die Nutzung eines Laptops dient der eingebaute **Akku als Notstromversorgung** – ein kostenloser und sofort verfügbarer Schutz vor kurzfristigen Stromausfällen. |
+| **Wartbarkeit** | **Garantierte Datensicherheit** | Das Setup bietet eine einfache, aber professionelle **Backup-Strategie** mit Incus Export auf externe Speichermedien (USB-Platte) via Cronjob. |
+| **Architektur** | **Isoliert & Sicher** | Kombination aus **CasaOS** (Nutzerfreundlichkeit) und dem Container-Manager **Incus** (Isolation, Snapshots) mit **Cloudflare Zero Trust** (Zero-Trust-Zugriff ohne Portfreigaben). |
 
 ## 🧱 Architektur
 
-* **Fundament (Host-OS):** Alpine Linux 3.22 (minimalistischer Thin Client)
-* **Container-Manager:** Incus (mit exzellenten Snapshot- und Backup-Funktionen)
-* **CasaOS Container:** Debian 12 (Hostet CasaOS)
-* **Cloudflare Tunnel Container:** Alpine 3.22 (Isolierter Cloudflare Tunnel Connector für **Zero Trust** Zugang)
-
-## 🛠️ Voraussetzungen
-
-* Ein Alpine Linux System (Thin Client, VM oder dedizierter Server) mit Internetzugang.
-* Ein Cloudflare Account mit aktiviertem Zero Trust / Tunnels.
-
-## 🚀 Setup-Schritte
-
-Folgen Sie den nummerierten Skripten und der Anleitung im Markdown-Dokument.
-
-1.  **`01-incus-host-setup.sh`**: Installation und Initialisierung von Incus auf dem Alpine Host.
-2.  **`02-container-creation.sh`**: Erstellung des Debian- und des separaten Alpine-Containers.
-3.  **`04-casaos-install.sh`**: Installation von CasaOS **im Debian-Container**.
-4.  **`03-cloudflare-tunnel-setup.md`**: Schritt-für-Schritt-Anleitung für die Installation und Konfiguration des Cloudflare Tunnels **im Alpine-Container**.
+* **Fundament (Host-OS):** Alpine Linux (Minimalistisch, ideal für Thin Clients/Laptops)
+* **Container-Manager:** Incus (LXD-Nachfolger)
+* **debian-container:** Hostet CasaOS
+* **alpine-container:** Hostet den Cloudflare Tunnel Connector
 
 ---
 
-## 💡 Erweiterungsmöglichkeiten
+Dieses Repository zeigt, dass **performantes und zuverlässiges Self-Hosting** kein teures, neues Gerät erfordert, sondern von einer durchdachten Software-Architektur lebt.
 
-Dieses Setup kann leicht um weitere Services wie **Nginx Proxy Manager (NPM Plus)**, **DDClient** oder andere **Kubernetes-Dienste** erweitert werden, die Sie in eigenen Containern betreiben können.
 
 ## [📺](https://www.youtube.com/watch?v=stuXqnhpHzA) YouTube Video
