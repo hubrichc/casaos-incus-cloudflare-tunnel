@@ -95,13 +95,9 @@ Bash
 
 # In der Root-Crontab (sudo crontab -e):
 0 22 * * * /usr/local/bin/incus_backup.sh > /var/log/incus_backup.log 2>&1
-
+```
 
 ## 📺 YouTube Video
 
 [Video-Anleitung zur Incus Self-Hosting Architektur](https://www.youtube.com/watch?v=stuxqnhpHzA)
-## 📺 YouTube Video
-
-* [Video-Anleitung zur Incus Self-Hosting Architektur](https://www.youtube.com/watch?v=stuxqnhpHzA)
-
  
