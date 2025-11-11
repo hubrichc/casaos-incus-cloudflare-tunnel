@@ -34,6 +34,7 @@ Das Setup ist extrem flexibel und skaliert von minimal bis performant:
 
 ### Schritt 1: Incus auf dem Host installieren und initialisieren
 
+⚠️ WICHTIGER HINWEIS ZU ALPINE REPOSITORIES: Bevor Sie Incus installieren können, müssen die Paketquellen angepasst werden, da sonst nicht alle notwendigen Pakete gefunden werden. Führen Sie auf dem Alpine Host aus: vi /etc/apk/repositories und stellen Sie sicher, dass die community Repositories aktiviert sind.
 Führen Sie das Skript `01-incus-host-setup.sh` auf Ihrem Alpine Host aus.
 
 ```bash
@@ -96,6 +97,22 @@ Bash
 # In der Root-Crontab (sudo crontab -e):
 0 22 * * * /usr/local/bin/incus_backup.sh > /var/log/incus_backup.log 2>&1
 ```
+
+''''
+⚠️ Troubleshooting & Wichtige Hinweise
+BIOS-Einstellung für Virtualisierung (VMs)
+Problem: Incus kann keine VMs starten (z.B. für K3s).
+
+Lösung: Stellen Sie sicher, dass im BIOS/UEFI Ihres Geräts die Virtualisierungs-Funktionen aktiviert sind: Intel VTx / Intel VTD oder die entsprechenden AMD-V/AMD-Vi Äquivalente.
+
+Paketquellen (Repository-Anpassung)
+Problem: Die Installation von Incus oder Docker in Alpine schlägt mit Fehlermeldung fehl.
+
+Lösung: Prüfen Sie vor der Installation, ob die community Repositories in /etc/apk/repositories aktiviert sind.
+
+High Availability (HA) Vorbereitung
+Die einfache incus export und incus import Funktion ermöglicht es, Container schnell als Backup auf einem zweiten Laptop vorzuhalten. Im Fehlerfall kann das defekte Laptop einfach ausgeschaltet und der Container-Export auf der zweiten Maschine wieder gestartet werden.
+
 
 ## 📺 YouTube Video
 
