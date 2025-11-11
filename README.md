@@ -34,10 +34,12 @@ Das Setup ist extrem flexibel und skaliert von minimal bis performant:
 
 ### Schritt 1: Incus auf dem Host installieren und initialisieren
 
+
 ⚠️ WICHTIGER HINWEIS ZU ALPINE REPOSITORIES: Bevor Sie Incus installieren können, müssen die Paketquellen angepasst werden, da sonst nicht alle notwendigen Pakete gefunden werden. Führen Sie auf dem Alpine Host aus: vi /etc/apk/repositories und stellen Sie sicher, dass die community Repositories aktiviert sind.
 Führen Sie das Skript `01-incus-host-setup.sh` auf Ihrem Alpine Host aus.
 
-```bash
+```
+bash
 # 01-incus-host-setup.sh Inhalt:
 apk update
 apk add incus incus-vm incus-client
@@ -98,7 +100,8 @@ Bash
 0 22 * * * /usr/local/bin/incus_backup.sh > /var/log/incus_backup.log 2>&1
 ```
 
-''''
+'''
+
 ⚠️ Troubleshooting & Wichtige Hinweise
 BIOS-Einstellung für Virtualisierung (VMs)
 Problem: Incus kann keine VMs starten (z.B. für K3s).
