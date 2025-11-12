@@ -102,19 +102,6 @@ Bash
 
 '''
 
-⚠️ Troubleshooting & Wichtige Hinweise
-BIOS-Einstellung für Virtualisierung (VMs)
-Problem: Incus kann keine VMs starten (z.B. für K3s).
-
-Lösung: Stellen Sie sicher, dass im BIOS/UEFI Ihres Geräts die Virtualisierungs-Funktionen aktiviert sind: Intel VTx / Intel VTD oder die entsprechenden AMD-V/AMD-Vi Äquivalente.
-
-Paketquellen (Repository-Anpassung)
-Problem: Die Installation von Incus oder Docker in Alpine schlägt mit Fehlermeldung fehl.
-
-Lösung: Prüfen Sie vor der Installation, ob die community Repositories in /etc/apk/repositories aktiviert sind.
-
-High Availability (HA) Vorbereitung
-Die einfache incus export und incus import Funktion ermöglicht es, Container schnell als Backup auf einem zweiten Laptop vorzuhalten. Im Fehlerfall kann das defekte Laptop einfach ausgeschaltet und der Container-Export auf der zweiten Maschine wieder gestartet werden.
 
 ## ⚠️ Troubleshooting & Wichtige Hinweise (Erweitert)
 
@@ -126,7 +113,14 @@ Die einfache incus export und incus import Funktion ermöglicht es, Container sc
 * **Problem:** CasaOS wird zwar installiert, aber die Apps laden nicht, oft mit einer Fehlermeldung zur Docker API-Version. Dies tritt auf, weil CasaOS eine bestimmte Docker-API-Version erwartet, die im Container nicht gefunden wird.
 * **Lösung (Der "Trick"):** Dies wird durch die Korrektur der API-Version oder der Zugriffsrechte behoben, wodurch CasaOS auch in einem Incus-Container einwandfrei funktioniert (was bei anderen Lösungen oft eine VM erfordert).
     * **Prüfen/Setzen:** Verifizieren Sie, dass die Umgebungsvariable **`DOCKER_API_VERSION`** im CasaOS-Container (bzw. für den CasaOS-Dienst) auf einen kompatiblen Wert (z.B. `1.39` oder ähnliches) gesetzt ist oder dass die **Rechte** des Sockets (`/var/run/docker.sock`) für den CasaOS-Benutzer stimmen.
-
+  
+    
+    **A) Fix im Debian-Container ausführen:**
+```bash
+# Im debian-container /bin/sh ausführen:
+bash -c "$(wget -qLO - [https://raw.githubusercontent.com/bigbeartechworld/big-bear-scripts/master/casaos-fix-docker-api-version/run.sh](https://raw.githubusercontent.com/bigbeartechworld/big-bear-scripts/master/casaos-fix-docker-api-version/run.sh))"
+# Im debian-container /bin/sh ausführen:
+sudo apt-mark hold docker-ce docker-ce-cli containerd.io
 ---
 
 
