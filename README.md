@@ -122,8 +122,7 @@ bash -c "$(wget -qLO - [https://raw.githubusercontent.com/bigbeartechworld/big-b
 # Im debian-container /bin/sh ausführen:
 sudo apt-mark hold docker-ce docker-ce-cli containerd.io
 ---
-
-
+'''
 
 ## 📺 YouTube Video
 
