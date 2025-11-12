@@ -100,7 +100,6 @@ Bash
 0 22 * * * /usr/local/bin/incus_backup.sh > /var/log/incus_backup.log 2>&1
 ```
 
-'''
 
 
 ## ⚠️ Troubleshooting & Wichtige Hinweise (Erweitert)
@@ -121,8 +120,7 @@ Bash
 bash -c "$(wget -qLO - [https://raw.githubusercontent.com/bigbeartechworld/big-bear-scripts/master/casaos-fix-docker-api-version/run.sh](https://raw.githubusercontent.com/bigbeartechworld/big-bear-scripts/master/casaos-fix-docker-api-version/run.sh))"
 # Im debian-container /bin/sh ausführen:
 sudo apt-mark hold docker-ce docker-ce-cli containerd.io
----
-'''
+```
 
 ## 📺 YouTube Video
 
