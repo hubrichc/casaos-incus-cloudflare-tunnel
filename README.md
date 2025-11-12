@@ -105,7 +105,7 @@ Bash
 ## ⚠️ Troubleshooting & Wichtige Hinweise (Erweitert)
 
 ### 1. BIOS-Einstellung für Virtualisierung (VT-d/VT-x)
-* **Problem:** Virtuelle Maschinen (VMs) in Incus (z.B. K3s) starten nicht oder der Incus-Dienst kann nicht initialisiert werden. Dies kann auch nach einem BIOS-Reset (z.B. durch leere CMOS-Batterie, wie bei Ihrem Lenovo U160) passieren, da die Einstellungen nicht gespeichert wurden.
+* **Problem:** Virtuelle Maschinen (VMs) in Incus (z.B. K3s) starten nicht oder der Incus-Dienst kann nicht initialisiert werden. Dies kann auch nach einem BIOS-Reset (z.B. durch leere CMOS-Batterie) passieren, da die Einstellungen nicht gespeichert wurden.
 * **Lösung:** Stellen Sie sicher, dass im BIOS/UEFI Ihres Geräts **Intel VTx** / **Intel VT-d** oder die entsprechenden **AMD-V/AMD-Vi** Äquivalente **aktiviert** sind. **VT-d** (Direct I/O) ist besonders wichtig für den direkten Hardware-Zugriff in VMs und die allgemeine Stabilität der Virtualisierung.
 
 ### 2. CasaOS Docker API-Fehler (Container-Setup)
